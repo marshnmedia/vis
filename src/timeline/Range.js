@@ -374,12 +374,24 @@ Range.prototype._onMouseWheel = function(event) {
       scale = 1 / (1 + (delta / 5)) ;
     }
 
-    // calculate center, the date to zoom around
-    var gesture = util.fakeGesture(this, event),
-        pointer = getPointer(gesture.center, this.body.dom.center),
-        pointerDate = this._pointerToDate(pointer);
+    //If holding shift key, scroll timeline vertically
+    //else zoom date ranges
+    if(event.shiftKey) {
+      var oldScrollTop = timeline._getScrollTop();
+      var newScrollTop = oldScrollTop + (delta*20);
+      //TODO: not sure using the timeline global var is best practice
+      timeline._setScrollTop(newScrollTop);
+      if (newScrollTop != oldScrollTop) {
+        timeline.redraw(); // TODO: this causes two redraws when dragging, the other is triggered by rangechange already
+      }
+    }else {
+      // calculate center, the date to zoom around
+      var gesture = util.fakeGesture(this, event),
+          pointer = getPointer(gesture.center, this.body.dom.center),
+          pointerDate = this._pointerToDate(pointer);
 
-    this.zoom(scale, pointerDate);
+      this.zoom(scale, pointerDate);
+    }
   }
 
   // Prevent default actions caused by mouse wheel

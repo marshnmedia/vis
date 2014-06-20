@@ -1,6 +1,9 @@
 # vis.js history
 http://visjs.org
 
+## 2014-06-20, version 2.0.1
+
+- Added ability to scroll timeline vertically when using mousewheel and holding shift key
 
 ## not yet released, version 2.0.0
 
